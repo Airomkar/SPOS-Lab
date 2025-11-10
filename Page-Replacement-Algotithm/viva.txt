@@ -1,0 +1,249 @@
+Excellent 👏 — you’ve shared the three classic **Page Replacement Algorithms** in Operating Systems:
+
+➡️ **FIFO (First In First Out)**
+➡️ **LRU (Least Recently Used)**
+➡️ **Optimal Page Replacement**
+
+Let’s go through them **one by one**:
+
+* ✅ Explain the **concept clearly**,
+* ✅ Describe how the **code works**, and
+* ✅ Provide the **possible viva questions and answers**.
+
+---
+
+## 🧠 1️⃣ FIFO (First In First Out) Page Replacement
+
+### 🔹 **Concept**
+
+* FIFO is the **simplest page replacement algorithm**.
+* The idea: **The page that came first in memory is the first to be replaced** when a new page needs space.
+* Pages are handled like a **queue (first-in, first-out)**.
+
+---
+
+### ⚙️ **Working of the Code**
+
+```java
+buffer = new int[frames]; // memory frames
+reference = new int[ref_len]; // page reference string
+pointer = 0; // points to the next frame to replace
+```
+
+1. User enters:
+
+   * Number of frames
+   * Length of reference string
+   * Reference string values (pages to be accessed)
+
+2. For each page:
+
+   * If the page already exists in `buffer` → **Page Hit**
+   * If not found → **Page Fault**
+
+     * Replace the page at position `pointer`
+     * Move pointer circularly (`pointer = (pointer + 1) % frames`)
+
+3. The code tracks:
+
+   * `hit` → number of page hits
+   * `fault` → number of page faults
+   * `mem_layout[][]` → shows the memory layout at each step
+
+---
+
+### 🧾 **Example**
+
+**Input**
+
+```
+Frames = 3
+Reference String = 7 0 1 2 0 3 0 4
+```
+
+**Output (sample)**
+
+```
+Memory Layout:
+7 0 1
+2 0 3
+0 4 -
+
+Hits = 2
+Faults = 6
+Hit Ratio = 0.25
+```
+
+---
+
+### 🎓 **Viva Questions**
+
+| Question                                 | Answer                                                                                          |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Q1: What is FIFO page replacement?       | The oldest loaded page (first in) is replaced first.                                            |
+| Q2: Is FIFO optimal?                     | No, it can cause unnecessary faults (Belady’s Anomaly).                                         |
+| Q3: What is a page fault?                | It occurs when the requested page is not in memory.                                             |
+| Q4: What data structure is used in FIFO? | A queue.                                                                                        |
+| Q5: What is Belady’s Anomaly?            | An unusual situation where increasing the number of frames increases the number of page faults. |
+
+---
+
+## 🧠 2️⃣ LRU (Least Recently Used) Page Replacement
+
+### 🔹 **Concept**
+
+* LRU replaces the **page that has not been used for the longest time**.
+* It assumes that recently used pages will likely be used again soon.
+* It is based on **temporal locality** of reference.
+
+---
+
+### ⚙️ **Working of the Code**
+
+```java
+int counter[] = new int[frames]; // stores the last used time
+```
+
+For each page in reference string:
+
+1. If page is found → **Hit**, update its `counter` to current time (`i + 1`).
+2. If not found → **Fault**
+
+   * Find the page with **minimum counter value** (least recently used)
+   * Replace that page with the new one
+   * Update the counter for the new page
+
+The code maintains:
+
+* `hit`, `fault`, and a `mem_layout[][]` table (same as FIFO)
+
+---
+
+### 🧾 **Example**
+
+**Input**
+
+```
+Frames = 3
+Reference String = 7 0 1 2 0 3 0 4
+```
+
+**Output (sample)**
+
+```
+Memory Layout:
+7 0 1
+2 0 3
+0 4 -
+
+Hits = 3
+Faults = 5
+Hit Ratio = 0.375
+```
+
+---
+
+### 🎓 **Viva Questions**
+
+| Question                              | Answer                                                                |
+| ------------------------------------- | --------------------------------------------------------------------- |
+| Q1: What does LRU stand for?          | Least Recently Used.                                                  |
+| Q2: What is the idea behind LRU?      | Replace the page that was least recently used in the past.            |
+| Q3: Which principle does LRU follow?  | Principle of locality (recently used pages will be used again).       |
+| Q4: What is the main drawback of LRU? | It is costly to implement in hardware (requires tracking usage time). |
+| Q5: How is LRU better than FIFO?      | It reduces unnecessary page faults and avoids Belady’s anomaly.       |
+
+---
+
+## 🧠 3️⃣ Optimal Page Replacement Algorithm
+
+### 🔹 **Concept**
+
+* This algorithm replaces the **page that will not be used for the longest time in the future**.
+* It is **theoretical and ideal**, as it requires future knowledge.
+* Used as a **benchmark** to compare other algorithms.
+
+---
+
+### ⚙️ **Working of the Code**
+
+1. For each page request:
+
+   * If page is already in memory → **Hit**
+   * Else → **Fault**
+
+     * Check each frame and predict **when it will be used next**.
+     * Replace the page whose next use is **farthest in the future**, or not used again.
+
+```java
+for (int j = 0; j < frames; j++) {
+    for (int k = i + 1; k < ref_len; k++) {
+        if (buffer[j] == reference[k]) {
+            nextUse = k;
+            break;
+        }
+    }
+}
+```
+
+2. Keeps a `mem_layout[][]` for memory visualization and calculates hit/fault statistics.
+
+---
+
+### 🧾 **Example**
+
+**Input**
+
+```
+Frames = 3
+Reference String = 7 0 1 2 0 3 0 4
+```
+
+**Output (sample)**
+
+```
+Frame 1: 7 7 7 2 2 2 0 0
+Frame 2: - 0 0 0 0 3 3 3
+Frame 3: - - 1 1 1 1 1 4
+
+Total Hits: 4
+Hit Ratio: 0.5
+Total Faults: 4
+```
+
+---
+
+### 🎓 **Viva Questions**
+
+| Question                                                 | Answer                                                                           |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Q1: What is the Optimal Page Replacement Algorithm?      | It replaces the page that will not be used for the longest period in the future. |
+| Q2: Why is it called “optimal”?                          | Because it gives the minimum possible number of page faults.                     |
+| Q3: Is it used in real systems?                          | No, because future page references are not known in advance.                     |
+| Q4: What is the main advantage of the Optimal algorithm? | It provides the best performance and serves as a theoretical reference.          |
+| Q5: How does it differ from LRU?                         | LRU uses past usage; Optimal uses future usage prediction.                       |
+
+---
+
+## 📊 **Comparison Summary Table**
+
+| Algorithm   | Replacement Basis   | Page Faults     | Real-world Use | Implementation |
+| ----------- | ------------------- | --------------- | -------------- | -------------- |
+| **FIFO**    | Oldest page         | Moderate        | Simple systems | Very easy      |
+| **LRU**     | Least recently used | Lower than FIFO | Practical      | Medium         |
+| **Optimal** | Farthest future use | Minimum         | Theoretical    | Difficult      |
+
+---
+
+## ✅ **Quick Summary**
+
+| Algorithm   | Type                    | Pros                    | Cons                         |
+| ----------- | ----------------------- | ----------------------- | ---------------------------- |
+| **FIFO**    | Oldest page replaced    | Simple to implement     | May cause Belady’s anomaly   |
+| **LRU**     | Least recently used     | Practical and efficient | Requires usage tracking      |
+| **Optimal** | Page farthest in future | Minimum page faults     | Not possible in real systems |
+
+---
+
+Would you like me to add a **step-by-step dry run** example (with reference string visualization) for each algorithm?
+It will help you **explain the process flow easily in your viva**.

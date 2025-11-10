@@ -40,12 +40,6 @@ The **Need Matrix** shows how many more resources each process needs to finish e
 
 ### 2️⃣ **Checking for a Safe Sequence**
 
-The core logic is inside:
-
-```java
-public static int[] IsSafeSequence(int[][] allocation, int[][] need, int[] available)
-```
-
 #### Here’s what it does:
 
 1. Initializes:

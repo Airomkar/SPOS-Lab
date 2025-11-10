@@ -1,0 +1,247 @@
+Perfect 👏 You’ve shared **all the major CPU Scheduling Algorithms** in Operating Systems:
+
+➡️ **FCFS** (First Come First Serve)
+➡️ **SJF Non-Preemptive**
+➡️ **SJF Preemptive (SRTF)**
+➡️ **Priority Non-Preemptive**
+➡️ **Priority Preemptive**
+➡️ **Round Robin (RR)**
+
+Let’s go through each one —
+✅ **clear conceptual explanation**,
+✅ **important formulae**, and
+✅ **possible viva questions with answers** —
+so you can confidently answer during your exam or viva.
+
+---
+
+# 🧠 **1️⃣ FCFS (First Come First Serve Scheduling)**
+
+### 🔹 **Concept**
+
+* Processes are executed **in the order of their arrival**.
+* The CPU is allocated to the process that arrives **first** in the ready queue.
+* **Non-preemptive**: Once a process starts, it runs till completion.
+
+### 🔹 **Key Formulae**
+
+```
+Completion Time (CT) = start time + burst time  
+Turnaround Time (TAT) = CT - AT  
+Waiting Time (WT) = TAT - BT
+```
+
+### 🔹 **Characteristics**
+
+* **Type:** Non-preemptive
+* **Basis:** Arrival Time
+* **Fairness:** Simple but causes **Convoy Effect** (long process delays shorter ones)
+
+### 🎓 **Viva Questions**
+
+1. What is FCFS scheduling?
+   → CPU is allocated to processes in the order they arrive.
+
+2. Is FCFS preemptive or non-preemptive?
+   → Non-preemptive.
+
+3. What is the main disadvantage of FCFS?
+   → Convoy effect — short processes wait for long ones.
+
+4. How is waiting time calculated?
+   → WT = TAT - BT.
+
+---
+
+# 🧠 **2️⃣ SJF Non-Preemptive (Shortest Job First)**
+
+### 🔹 **Concept**
+
+* The process with the **shortest burst time** is selected next.
+* **Non-preemptive**: Once a process starts, it runs till completion.
+
+### 🔹 **Characteristics**
+
+* **Goal:** Minimize average waiting and turnaround times.
+* **Problem:** Starvation — long processes may wait indefinitely.
+
+### 🔹 **Formulae**
+
+```
+TAT = CT - AT  
+WT = TAT - BT
+```
+
+### 🎓 **Viva Questions**
+
+1. What is SJF?
+   → Process with the smallest burst time is selected first.
+
+2. Is SJF preemptive or non-preemptive?
+   → Non-preemptive.
+
+3. What is the drawback of SJF?
+   → Starvation of long processes.
+
+4. What is the advantage of SJF?
+   → Minimum average waiting time.
+
+---
+
+# 🧠 **3️⃣ SJF Preemptive (Shortest Remaining Time First - SRTF)**
+
+### 🔹 **Concept**
+
+* A preemptive version of SJF.
+* At any time, if a new process arrives with **shorter remaining burst time**, it **preempts** the running one.
+
+### 🔹 **Characteristics**
+
+* **Preemptive**
+* **Efficient**, but may cause **starvation**.
+
+### 🎓 **Viva Questions**
+
+1. What is the difference between SJF and SRTF?
+   → SRTF allows preemption; SJF does not.
+
+2. Why is SRTF optimal?
+   → It gives the minimum average waiting time.
+
+3. What is preemption?
+   → Temporarily stopping a process to run another.
+
+4. What causes starvation in SRTF?
+   → Long processes keep getting preempted by shorter ones.
+
+---
+
+# 🧠 **4️⃣ Priority Scheduling (Non-Preemptive)**
+
+### 🔹 **Concept**
+
+* Each process has a **priority value**.
+* CPU is allocated to the process with **highest priority** (lowest priority number).
+* **Non-preemptive**: Once running, it cannot be interrupted.
+
+### 🔹 **Characteristics**
+
+* **Basis:** Priority instead of Arrival or Burst time.
+* **Problem:** Starvation (low priority processes may never run).
+* **Solution:** Aging (gradually increasing priority over time).
+
+### 🎓 **Viva Questions**
+
+1. What is Priority Scheduling?
+   → CPU is allocated to the process with the highest priority.
+
+2. Is it preemptive or non-preemptive?
+   → Can be both; this one is non-preemptive.
+
+3. What is aging?
+   → Gradually increasing priority of waiting processes to prevent starvation.
+
+4. What is the drawback?
+   → Low priority processes may starve.
+
+---
+
+# 🧠 **5️⃣ Priority Scheduling (Preemptive)**
+
+### 🔹 **Concept**
+
+* A process with a higher priority **can preempt** a lower-priority process.
+* The CPU always executes the process with **highest priority**.
+
+### 🔹 **Characteristics**
+
+* **Preemptive**
+* Can lead to **starvation**.
+* Often used in **real-time systems**.
+
+### 🎓 **Viva Questions**
+
+1. What is the main difference between preemptive and non-preemptive priority scheduling?
+   → Preemptive allows interruption by higher-priority process.
+
+2. What happens when two processes have the same priority?
+   → The one that arrived earlier runs first.
+
+3. What is starvation in priority scheduling?
+   → Low priority processes may never get CPU time.
+
+---
+
+# 🧠 **6️⃣ Round Robin Scheduling**
+
+### 🔹 **Concept**
+
+* Each process is given a **fixed time quantum** (e.g., 2 ms).
+* After its time expires, the CPU is given to the next process in the queue.
+* **Preemptive** and **fair** scheduling algorithm.
+
+### 🔹 **Characteristics**
+
+* **Best suited for time-sharing systems.**
+* Reduces starvation.
+* If time quantum is small → more context switches.
+* If large → behaves like FCFS.
+
+### 🎓 **Viva Questions**
+
+1. What is Round Robin Scheduling?
+   → Each process gets equal CPU time in cyclic order.
+
+2. What is Time Quantum?
+   → The fixed CPU time given to each process.
+
+3. What happens if a process doesn’t finish within its time quantum?
+   → It is moved to the end of the queue and resumes later.
+
+4. Is RR preemptive or non-preemptive?
+   → Preemptive.
+
+5. What are the advantages of RR?
+   → Fair, simple, and suitable for time-sharing systems.
+
+---
+
+# 🧮 **Important Formulas (For All Scheduling Algorithms)**
+
+| Term            | Formula         | Meaning                                     |
+| --------------- | --------------- | ------------------------------------------- |
+| **CT**          | Completion Time | Time when process finishes execution        |
+| **TAT**         | CT – AT         | Total time taken from arrival to completion |
+| **WT**          | TAT – BT        | Time spent waiting in ready queue           |
+| **Average TAT** | Σ(TAT) / n      | Mean turnaround time                        |
+| **Average WT**  | Σ(WT) / n       | Mean waiting time                           |
+
+---
+
+# 📊 **Comparison Summary Table**
+
+| Algorithm         | Type           | Basis          | Preemptive | Starvation | Use Case              |
+| ----------------- | -------------- | -------------- | ---------- | ---------- | --------------------- |
+| **FCFS**          | Non-Preemptive | Arrival Time   | ❌          | ❌          | Simple systems        |
+| **SJF (NP)**      | Non-Preemptive | Burst Time     | ❌          | ✅          | Batch jobs            |
+| **SJF (P/SRTF)**  | Preemptive     | Remaining Time | ✅          | ✅          | Short jobs            |
+| **Priority (NP)** | Non-Preemptive | Priority       | ❌          | ✅          | Simple priority-based |
+| **Priority (P)**  | Preemptive     | Priority       | ✅          | ✅          | Real-time systems     |
+| **Round Robin**   | Preemptive     | Time Quantum   | ✅          | ❌          | Time-sharing systems  |
+
+---
+
+# ✅ **In Short**
+
+| Algorithm           | Best Feature            | Main Drawback              |
+| ------------------- | ----------------------- | -------------------------- |
+| **FCFS**            | Simple                  | Convoy Effect              |
+| **SJF**             | Minimum waiting time    | Starvation                 |
+| **SRTF**            | Optimal time            | Starvation                 |
+| **Priority (NP/P)** | Handles important tasks | Starvation                 |
+| **Round Robin**     | Fair for all            | Context switching overhead |
+
+---
+
+Would you like me to create a **summary chart with Gantt charts (timeline diagrams)** for these algorithms using an example input (e.g., 4 processes with AT/BT)?
+It helps visualize how each algorithm schedules processes differently — very useful for viva answers and practical explanation.

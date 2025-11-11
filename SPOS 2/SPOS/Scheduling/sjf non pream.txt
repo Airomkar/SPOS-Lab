@@ -1,0 +1,63 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter number of processes: ";
+    cin >> n;
+
+    int pid[20], at[20], bt[20], pr[20];  // Process ID, Arrival, Burst, Priority
+    int ct[20], tat[20], wt[20];
+    bool done[20] = {false};
+    float totalWT = 0, totalTAT = 0;
+
+    // Input process details
+    for (int i = 0; i < n; i++) {
+        cout << "\nEnter Process ID, Arrival Time, Burst Time and Priority: ";
+        cin >> pid[i] >> at[i] >> bt[i] >> pr[i];
+    }
+
+    int completed = 0, currentTime = 0;
+
+    while (completed < n) {
+        int idx = -1;
+        int highestPriority = 9999;  // Smaller number = higher priority
+
+        // Find the process with the highest priority (smallest pr[i])
+        for (int i = 0; i < n; i++) {
+            if (!done[i] && at[i] <= currentTime && pr[i] < highestPriority) {
+                highestPriority = pr[i];
+                idx = i;
+            }
+        }
+
+        // If no process has arrived yet
+        if (idx == -1) {
+            currentTime++;
+            continue;
+        }
+
+        // Execute the selected process
+        currentTime += bt[idx];
+        ct[idx] = currentTime;
+        tat[idx] = ct[idx] - at[idx];
+        wt[idx] = tat[idx] - bt[idx];
+
+        totalWT += wt[idx];
+        totalTAT += tat[idx];
+        done[idx] = true;
+        completed++;
+    }
+
+    cout << "\nProcess\tAT\tBT\tPR\tCT\tTAT\tWT\n";
+    for (int i = 0; i < n; i++) {
+        cout << "P" << pid[i] << "\t" << at[i] << "\t" << bt[i]
+             << "\t" << pr[i] << "\t" << ct[i]
+             << "\t" << tat[i] << "\t" << wt[i] << "\n";
+    }
+
+    cout << "\nAverage Waiting Time: " << totalWT / n;
+    cout << "\nAverage Turnaround Time: " << totalTAT / n << endl;
+
+    return 0;
+}

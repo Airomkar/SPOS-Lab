@@ -1,0 +1,83 @@
+import java.util.concurrent.Semaphore;
+
+class ReaderWriterProblem {
+    static Semaphore mutex = new Semaphore(1);  // protects readCount
+    static Semaphore wrt = new Semaphore(1);    // controls writer access
+    static int readCount = 0;                   // number of active readers
+
+    // Reader Thread
+    static class Reader extends Thread {
+        int readerId;
+
+        Reader(int id) {
+            this.readerId = id;
+        }
+
+        public void run() {
+            try {
+                // Entry Section for reader
+                mutex.acquire();
+                readCount++;
+                if (readCount == 1)
+                    wrt.acquire();  // first reader locks writer
+                mutex.release();
+
+                // Reading Section
+                System.out.println("Reader " + readerId + " is READING.");
+                Thread.sleep(500);
+
+                // Exit Section for reader
+                mutex.acquire();
+                readCount--;
+                if (readCount == 0)
+                    wrt.release();  // last reader unlocks writer
+                mutex.release();
+
+                System.out.println("Reader " + readerId + " has FINISHED reading.");
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Writer Thread
+    static class Writer extends Thread {
+        int writerId;
+
+        Writer(int id) {
+            this.writerId = id;
+        }
+
+        public void run() {
+            try {
+                wrt.acquire();  // only one writer can access
+
+                System.out.println("Writer " + writerId + " is WRITING.");
+                Thread.sleep(1000);
+
+                wrt.release();
+                System.out.println("Writer " + writerId + " has FINISHED writing.");
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        // Creating multiple readers and writers
+        Reader r1 = new Reader(1);
+        Reader r2 = new Reader(2);
+        Writer w1 = new Writer(1);
+        Reader r3 = new Reader(3);
+        Writer w2 = new Writer(2);
+
+        // Start them in sequence
+        r1.start();
+        w1.start();
+        r2.start();
+        r3.start();
+        w2.start();
+    }
+}

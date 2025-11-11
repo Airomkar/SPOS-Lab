@@ -1,0 +1,67 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter number of processes: ";
+    cin >> n;
+
+    int pid[20], at[20], bt[20], pr[20];   // Process ID, Arrival, Burst, Priority
+    int rt[20], ct[20], tat[20], wt[20];   // Remaining, Completion, Turnaround, Waiting
+    bool done[20] = {false};
+
+    float totalWT = 0, totalTAT = 0;
+
+    for (int i = 0; i < n; i++) {
+        cout << "\nEnter Process ID, Arrival Time, Burst Time, and Priority: ";
+        cin >> pid[i] >> at[i] >> bt[i] >> pr[i];
+        rt[i] = bt[i]; // remaining time = burst time initially
+    }
+
+    int completed = 0, currentTime = 0;
+
+    while (completed < n) {
+        int idx = -1;
+        int highestPriority = 9999; // smaller number = higher priority
+
+        // Find process with highest priority among those that have arrived
+        for (int i = 0; i < n; i++) {
+            if (at[i] <= currentTime && rt[i] > 0 && pr[i] < highestPriority) {
+                highestPriority = pr[i];
+                idx = i;
+            }
+        }
+
+        // If no process is ready, increment time
+        if (idx == -1) {
+            currentTime++;
+            continue;
+        }
+
+        // Run the selected process for 1 unit (preemptive)
+        rt[idx]--;
+        currentTime++;
+
+        // If process completed
+        if (rt[idx] == 0) {
+            completed++;
+            ct[idx] = currentTime;
+            tat[idx] = ct[idx] - at[idx];
+            wt[idx] = tat[idx] - bt[idx];
+            totalWT += wt[idx];
+            totalTAT += tat[idx];
+        }
+    }
+
+    cout << "\nProcess\tAT\tBT\tPR\tCT\tTAT\tWT\n";
+    for (int i = 0; i < n; i++) {
+        cout << "P" << pid[i] << "\t" << at[i] << "\t" << bt[i]
+             << "\t" << pr[i] << "\t" << ct[i]
+             << "\t" << tat[i] << "\t" << wt[i] << "\n";
+    }
+
+    cout << "\nAverage Waiting Time: " << totalWT / n;
+    cout << "\nAverage Turnaround Time: " << totalTAT / n << endl;
+
+    return 0;
+}

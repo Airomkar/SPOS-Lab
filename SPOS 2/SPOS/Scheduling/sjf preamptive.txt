@@ -1,0 +1,60 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    cout << "Enter number of processes: ";
+    cin >> n;
+
+    int pid[20], at[20], bt[20], ct[20], tat[20], wt[20];
+    bool done[20] = {false};
+    float totalWT = 0, totalTAT = 0;
+
+    for (int i = 0; i < n; i++) {
+        cout << "\nEnter Process ID, Arrival Time and Burst Time: ";
+        cin >> pid[i] >> at[i] >> bt[i];
+    }
+
+    int completed = 0, currentTime = 0;
+
+    while (completed < n) {
+        int idx = -1;
+        int minBT = 9999;
+
+        // Find process with smallest burst time among arrived and not completed
+        for (int i = 0; i < n; i++) {
+            if (!done[i] && at[i] <= currentTime && bt[i] < minBT) {
+                minBT = bt[i];
+                idx = i;
+            }
+        }
+
+        // If no process has arrived yet
+        if (idx == -1) {
+            currentTime++;
+            continue;
+        }
+
+        // Process selected
+        currentTime += bt[idx];      // Add burst time to current time
+        ct[idx] = currentTime;       // Completion time
+        tat[idx] = ct[idx] - at[idx];
+        wt[idx] = tat[idx] - bt[idx];
+
+        totalWT += wt[idx];
+        totalTAT += tat[idx];
+        done[idx] = true;
+        completed++;
+    }
+
+    cout << "\nProcess\tAT\tBT\tCT\tTAT\tWT\n";
+    for (int i = 0; i < n; i++) {
+        cout << "P" << pid[i] << "\t" << at[i] << "\t" << bt[i]
+             << "\t" << ct[i] << "\t" << tat[i] << "\t" << wt[i] << "\n";
+    }
+
+    cout << "\nAverage Waiting Time: " << totalWT / n;
+    cout << "\nAverage Turnaround Time: " << totalTAT / n << endl;
+
+    return 0;
+}

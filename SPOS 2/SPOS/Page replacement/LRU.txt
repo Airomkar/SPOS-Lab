@@ -1,0 +1,50 @@
+import java.util.*;
+
+public class LRU {
+    public static void main(String[] args) {
+        int ref[] = {2, 3, 2, 1, 5, 2, 4, 5, 3, 2, 5, 2};
+        int frames = 3;
+        int frame[] = new int[frames];
+        int used[] = new int[frames]; // stores how recently a frame was used
+        Arrays.fill(frame, -1);
+
+        int faults = 0, time = 0;
+
+        for (int i = 0; i < ref.length; i++) {
+            int page = ref[i];
+            boolean found = false;
+
+            // Check if page already in frame (hit)
+            for (int j = 0; j < frames; j++) {
+                if (frame[j] == page) {
+                    found = true;
+                    used[j] = ++time; // update last used time
+                    break;
+                }
+            }
+
+            // If not found → page fault
+            if (!found) {
+                int pos = -1, min = Integer.MAX_VALUE;
+
+                // Find least recently used frame (smallest used[] value)
+                for (int j = 0; j < frames; j++) {
+                    if (frame[j] == -1) { pos = j; break; }
+                    if (used[j] < min) { min = used[j]; pos = j; }
+                }
+
+                frame[pos] = page;
+                used[pos] = ++time;
+                faults++;
+            }
+
+            // Print current frame state
+            System.out.print("Page " + page + " -> ");
+            for (int f : frame)
+                System.out.print((f == -1 ? "-" : f) + " ");
+            System.out.println(found ? "(No Fault)" : "(Page Fault)");
+        }
+
+        System.out.println("\nTotal Page Faults: " + faults);
+    }
+}

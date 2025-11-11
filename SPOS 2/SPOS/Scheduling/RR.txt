@@ -1,0 +1,64 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n, tq; // number of processes, time quantum
+    cout << "Enter number of processes: ";
+    cin >> n;
+
+    int pid[20], at[20], bt[20], rt[20], ct[20], tat[20], wt[20];
+    float totalWT = 0, totalTAT = 0;
+
+    cout << "Enter Time Quantum: ";
+    cin >> tq;
+
+    for (int i = 0; i < n; i++) {
+        cout << "\nEnter Process ID, Arrival Time and Burst Time: ";
+        cin >> pid[i] >> at[i] >> bt[i];
+        rt[i] = bt[i]; // remaining time = burst time initially
+    }
+
+    int completed = 0, currentTime = 0;
+    bool done[20] = {false};
+
+    while (completed < n) {
+        bool executed = false;
+
+        for (int i = 0; i < n; i++) {
+            // process must have arrived and not finished yet
+            if (at[i] <= currentTime && rt[i] > 0) {
+                executed = true;
+
+                if (rt[i] > tq) {
+                    rt[i] -= tq;
+                    currentTime += tq;
+                } else {
+                    currentTime += rt[i];
+                    rt[i] = 0;
+                    done[i] = true;
+                    completed++;
+                    ct[i] = currentTime;
+                    tat[i] = ct[i] - at[i];
+                    wt[i] = tat[i] - bt[i];
+                    totalWT += wt[i];
+                    totalTAT += tat[i];
+                }
+            }
+        }
+
+        // if no process executed, move time ahead
+        if (!executed)
+            currentTime++;
+    }
+
+    cout << "\nProcess\tAT\tBT\tCT\tTAT\tWT\n";
+    for (int i = 0; i < n; i++) {
+        cout << "P" << pid[i] << "\t" << at[i] << "\t" << bt[i]
+             << "\t" << ct[i] << "\t" << tat[i] << "\t" << wt[i] << "\n";
+    }
+
+    cout << "\nAverage Waiting Time: " << totalWT / n;
+    cout << "\nAverage Turnaround Time: " << totalTAT / n << endl;
+
+    return 0;
+}
